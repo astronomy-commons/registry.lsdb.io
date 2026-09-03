@@ -1,0 +1,15 @@
+# Changes here will be overwritten by Copier
+_commit: v2.2.0
+_src_path: gh:lincc-frameworks/python-project-template
+author_email: lincc-frameworks-team@lists.lsst.org
+author_name: LINCC Frameworks
+custom_install: notebook
+include_docs: false
+package_name: registry
+project_description: Resource files for HATS catalogs registered via registry.lsdb.io
+project_license: MIT
+project_name: registry
+project_organization: astronomy-commons
+python_versions:
+- '3.12'
+- '3.13'
