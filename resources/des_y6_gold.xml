@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ri:Resource xmlns=""
+    xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0"
+    xmlns:vg="http://www.ivoa.net/xml/VORegistry/v1.0"
+    xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0"
+    xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1"
+    xmlns:xs="http://www.ivoa.net/xml/SIA/v1.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    created="2025-11-18T20:30:04Z"
+    status="active"
+    updated="2026-06-17T16:08:34Z"
+    xsi:type="vs:CatalogService"
+    xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/SIA/v1.1 http://www.ivoa.net/xml/SIA/v1.1">
+    <title>LINCC Frameworks - UW/Epyc - Dark Energy Survey Y6 Gold</title>
+    <shortName>des_y6_gold</shortName>
+    <identifier>ivo://data.lsdb/uw/des_y6_gold</identifier>
+    <curation>
+        <publisher ivo-id="ivo://data.lsdb">LINCC Frameworks</publisher>
+        <creator>
+            <name>LINCC Frameworks</name>
+            <logo>https://github.com/astronomy-commons/lsdb/blob/main/docs/lincc-logo.png?raw=true</logo>
+        </creator>
+        <contact>
+            <name>LINCC Frameworks Admins</name>
+            <email>delucchi@andrew.cmu.edu</email>
+        </contact>
+    </curation>
+    <content>
+        <subject>surveys</subject>
+        <description>The Y6 Gold catalog is derived from Dark Energy Survey Data Release 2 (DES DR2) and includes all six years of g,r,i,z,Y imaging measurements. Y6 Gold was formulated for the DES final cosmological analyses, but it has very general applicability. Y6 Gold contains 669 million objects to i-band of 23.4 (S/N = 10 for extended objects).</description>
+        <referenceURL>https://des.ncsa.illinois.edu/releases/y6a2/Y6gold</referenceURL>
+        <type>Archive</type>
+        <contentLevel>Research</contentLevel>
+    </content>
+    <capability standardID="ivo://ivoa.net/std/hats#hats-1.0">
+        <interface role="std" version="1.0" xsi:type="vs:ParamHTTP">
+            <accessURL>https://data.lsdb.io/hats/des/des_y6_gold</accessURL>
+        </interface>
+    </capability>
+    <coverage>
+        <waveband>Optical</waveband>
+    </coverage>
+</ri:Resource>

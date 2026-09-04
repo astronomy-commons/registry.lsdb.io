@@ -1,0 +1,28 @@
+<ri:Resource xmlns="" xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0" xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0" xmlns:vg="http://www.ivoa.net/xml/VORegistry/v1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="vg:Registry" status="active" created="2006-01-19T00:00:00Z" updated="2024-09-27T20:00:00Z" xsi:schemaLocation="http://www.ivoa.net/xml/RegistryInterface/v1.0 http://www.ivoa.net/xml/RegistryInterface/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VORegistry/v1.0 http://www.ivoa.net/xml/VORegistry/v1.0">
+  <validationLevel validatedBy="ivo://archive.stsci.edu/nvoregistry">2</validationLevel>
+  <title>LINCC Frameworks Registry</title>
+  <shortName>data.lsdb</shortName>
+  <identifier>ivo://data.lsdb/registry</identifier>
+  <curation>
+    <publisher>LINCC Frameworks</publisher>
+    <contact>
+      <name>LINCC Frameworks Admins</name>
+      <email>delucchi@andrew.cmu.edu</email>
+    </contact>
+  </curation>
+  <content>
+    <subject>registry</subject>
+    <description>authority for HATS catalogs</description>
+    <referenceURL>https://data.lsdb.io</referenceURL>
+    <contentLevel>Research</contentLevel>
+  </content>
+  <capability standardID="ivo://ivoa.net/std/Registry" xsi:type="vg:Harvest">
+    <interface role="std" xsi:type="vg:OAIHTTP">
+      <accessURL>https://registry.lsdb.io/registry</accessURL>
+    </interface>
+    <maxRecords>0</maxRecords>
+  </capability>
+  <full>true</full>
+  <managedAuthority>data.lsdb.io</managedAuthority>
+  <managedAuthority>data.lsdb</managedAuthority>
+</ri:Resource>

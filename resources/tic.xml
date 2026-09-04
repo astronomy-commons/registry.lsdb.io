@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ri:Resource xmlns=""
+    xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0"
+    xmlns:vg="http://www.ivoa.net/xml/VORegistry/v1.0"
+    xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0"
+    xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1"
+    xmlns:xs="http://www.ivoa.net/xml/SIA/v1.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    created="2025-11-24T20:37UTC"
+    status="active"
+    updated="2026-06-17T16:08:34Z"
+    xsi:type="vs:CatalogService"
+    xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/SIA/v1.1 http://www.ivoa.net/xml/SIA/v1.1">
+    <title>LINCC Frameworks - UW/Epyc - TESS Input Catalog v8.2</title>
+    <shortName>tic</shortName>
+    <identifier>ivo://data.lsdb/uw/tic</identifier>
+    <curation>
+        <publisher ivo-id="ivo://data.lsdb">LINCC Frameworks</publisher>
+        <creator>
+            <name>LINCC Frameworks</name>
+            <logo>https://github.com/astronomy-commons/lsdb/blob/main/docs/lincc-logo.png?raw=true</logo>
+        </creator>
+        <contact>
+            <name>LINCC Frameworks Admins</name>
+            <email>delucchi@andrew.cmu.edu</email>
+        </contact>
+    </curation>
+    <content>
+        <subject>surveys</subject>
+        <description>The TESS Input Catalog (TIC) is a compiled catalog of stellar parameters for every optically persistent, stationary object in the sky. The TIC is used to help identify two-minute cadence target selection for the TESS mission, and to calculate physical and observational properties of planet candidates. It is for use by both the TESS science team and the public, and it is periodically updated---the current version is TIC-8.2. TIC-8.2 uses the GAIA DR2 catalog as a base and merges a large number of other photometric catalogs, including 2MASS, UCAC4, APASS, SDSS, WISE, etc. There are roughly 1.7 billion stellar and extended sources in the TIC, containing compiled magnitudes including B, V, u, g, r, i, z, J, H, K, W1-W4, and G. This version was released in 2021.</description>
+        <referenceURL>https://tess.mit.edu/science/tess-input-catalogue/</referenceURL>
+        <type>Archive</type>
+        <contentLevel>Research</contentLevel>
+    </content>
+    <capability standardID="ivo://ivoa.net/std/hats#hats-1.0">
+        <interface role="std" version="1.0" xsi:type="vs:ParamHTTP">
+            <accessURL>https://data.lsdb.io/hats/tess/tic</accessURL>
+        </interface>
+    </capability>
+    <coverage>
+        <waveband>Optical</waveband>
+    </coverage>
+</ri:Resource>
