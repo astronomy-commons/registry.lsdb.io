@@ -1,0 +1,20 @@
+<ri:Resource xmlns="" xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:vg="http://www.ivoa.net/xml/VORegistry/v1.0" xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0" created="2024-01-01T21:58:27Z" status="active" updated="2024-10-03T08:31:00Z" xsi:type="vg:Authority" xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VORegistry/v1.0 http://www.ivoa.net/xml/VORegistry/v1.0">
+  <title>LINCC Frameworks</title>
+  <shortName>data.lsdb</shortName>
+  <identifier>ivo://data.lsdb</identifier>
+  <curation>
+    <publisher>LINCC Frameworks</publisher>
+    <contact>
+      <name>LINCC Frameworks Admins</name>
+      <email>delucchi@andrew.cmu.edu</email>
+    </contact>
+  </curation>
+  <content>
+    <subject>virtual observatory</subject>
+    <description> </description>
+    <referenceURL>https://data.lsdb.io</referenceURL>
+    <type>Other</type>
+    <contentLevel>General</contentLevel>
+  </content>
+  <managingOrg>LINCC Frameworks</managingOrg>
+</ri:Resource>

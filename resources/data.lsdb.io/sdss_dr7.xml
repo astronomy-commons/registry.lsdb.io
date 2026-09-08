@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ri:Resource xmlns=""
+    xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0"
+    xmlns:vg="http://www.ivoa.net/xml/VORegistry/v1.0"
+    xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0"
+    xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1"
+    xmlns:xs="http://www.ivoa.net/xml/SIA/v1.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    created="2026-05-12T15:23UTC"
+    status="active"
+    updated="2026-06-17T16:08:34Z"
+    xsi:type="vs:CatalogService"
+    xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/SIA/v1.1 http://www.ivoa.net/xml/SIA/v1.1">
+    <title>LINCC Frameworks - UW/Epyc - Sloan Digital Sky Survey Data Release 7 (spectra)</title>
+    <shortName>sdss_dr7</shortName>
+    <identifier>ivo://data.lsdb/uw/sdss_dr7</identifier>
+    <curation>
+        <publisher ivo-id="ivo://data.lsdb">LINCC Frameworks</publisher>
+        <creator>
+            <name>LINCC Frameworks</name>
+            <logo>https://github.com/astronomy-commons/lsdb/blob/main/docs/lincc-logo.png?raw=true</logo>
+        </creator>
+        <contact>
+            <name>LINCC Frameworks Admins</name>
+            <email>delucchi@andrew.cmu.edu</email>
+        </contact>
+    </curation>
+    <content>
+        <subject>surveys</subject>
+        <description>The Sloan Digital Sky Survey (SDSS) Data Release 7 (DR7) provides imaging over 11,663 deg^2, with five-band photometry for 357 million objects. It includes regions in the Northern and Southern Galactic Caps, as well as areas at low Galactic latitude. The survey has completed spectroscopy over 9,380 deg^2, collecting over 1.6 million spectra in total from galaxies, quasars, and stars.</description>
+        <referenceURL>https://classic.sdss.org/dr7</referenceURL>
+        <type>Archive</type>
+        <contentLevel>Research</contentLevel>
+    </content>
+    <capability standardID="ivo://ivoa.net/std/hats#hats-1.0">
+        <interface role="std" version="1.0" xsi:type="vs:ParamHTTP">
+            <accessURL>https://data.lsdb.io/hats/sdss_dr7_spectra</accessURL>
+        </interface>
+    </capability>
+    <coverage>
+        <waveband>Optical</waveband>
+    </coverage>
+</ri:Resource>
