@@ -2,6 +2,7 @@ name: Deploy registry
 
 on:
   push:
+    # TODO: Remove deploy branch
     branches: [main, deploy]
 
 concurrency:
@@ -11,7 +12,6 @@ concurrency:
 env:
   DEPLOY_USER: registry
   DEPLOY_HOST: lsdb.phys.cmu.edu
-  DOCKER_CONTEXT: registry-prod
   # The path to the clone of this repo on the server.
   REGISTRY_LSDB_IO: /opt/services/vo_registry/registry.lsdb.io
   # Where authority.xml and registry.xml are stored on the server.
@@ -37,7 +37,7 @@ jobs:
             git config --global --add safe.directory ${{ env.REGISTRY_LSDB_IO }}
             cd ${{ env.REGISTRY_LSDB_IO }}
             git fetch --prune origin
-            git reset --hard origin/main
+            git reset --hard ${{ github.sha }}
             scripts/flatten_resources.sh resources _resources
             cp ${{ env.STATIC_RESOURCES }}/authority.xml _resources/authority.xml
             cp ${{ env.STATIC_RESOURCES }}/registry.xml _resources/registry.xml
@@ -49,6 +49,6 @@ jobs:
       # Restart the container so it re-reads the (bind-mounted) resources dir.
       - name: Restart the registry service
         run: |
-          docker context create $DOCKER_CONTEXT --docker "host=ssh://${DEPLOY_USER}@${DEPLOY_HOST}"
-          docker context use $DOCKER_CONTEXT
+          docker context create registry-prod --docker "host=ssh://${DEPLOY_USER}@${DEPLOY_HOST}"
+          docker context use registry-prod
           docker restart vo_registry
