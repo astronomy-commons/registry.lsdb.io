@@ -21,9 +21,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v7
-
       - name: Setup SSH
         run: |
           mkdir -p ${HOME}/.ssh
@@ -44,6 +41,9 @@ jobs:
             scripts/flatten_resources.sh resources _resources
             cp ${{ env.STATIC_RESOURCES }}/authority.xml _resources/authority.xml
             cp ${{ env.STATIC_RESOURCES }}/registry.xml _resources/registry.xml
+            chgrp -R docker _resources
+            chmod -R g+rwX _resources
+            chmod g+s _resources
           '
 
       # Restart the container so it re-reads the (bind-mounted) resources dir.
