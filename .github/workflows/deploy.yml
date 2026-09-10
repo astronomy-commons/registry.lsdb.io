@@ -1,0 +1,59 @@
+name: Deploy registry
+
+on:
+  push:
+    branches: [main, deploy]
+
+concurrency:
+  group: "deployment"
+  cancel-in-progress: false
+
+env:
+  DEPLOY_USER: registry
+  DEPLOY_HOST: lsdb.phys.cmu.edu
+  DOCKER_CONTEXT: registry-prod
+  # nested tree (rsync'd from this repo resources)
+  SERVER_RESOURCES: /opt/services/vo_registry/vo_registry/static/resources
+  # flat dir (bind-mounted into the container)
+  SERVER_RESOURCES_FLAT: /opt/services/vo_registry/vo_registry/static/_resources
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v7
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ${HOME}/.ssh
+          echo "${{ secrets.LSDB_PHYS_CMU_EDU_SSH_KEY }}" > ${HOME}/.ssh/id_rsa
+          ls -lk ${HOME}/.ssh/id_rsa
+          chmod 600 ${HOME}/.ssh/id_rsa
+          ssh-keyscan -t ssh-rsa $DEPLOY_HOST >> ${HOME}/.ssh/known_hosts
+
+      # Push the repo's XML resources to the server.
+      # authority.xml and registry.xml are protected from both transfer and deletion.
+      - name: Sync resources to the server
+        run: |
+          rsync -az --delete -i \
+            --exclude='authority.xml' --exclude='registry.xml' \
+            --include='*/' --include='*.xml' --exclude='*' \
+            -e "ssh -i ${HOME}/.ssh/id_rsa" \
+            resources/ "${DEPLOY_USER}@${DEPLOY_HOST}:${SERVER_RESOURCES}/"
+
+      # Rebuild the flat resources directory on the server.
+      - name: Flatten the resources (prefix them with directory name)
+        run: |
+          ssh -i "${HOME}/.ssh/id_rsa" "${DEPLOY_USER}@${DEPLOY_HOST}" \
+            "bash -s -- '${SERVER_RESOURCES}' '${SERVER_RESOURCES_FLAT}'" \
+            < .ci/flatten_resources.sh
+
+      - name: Set up Docker context
+        run: docker context create $DOCKER_CONTEXT --docker "host=ssh://${DEPLOY_USER}@${DEPLOY_HOST}"
+
+      # Restart the container so it re-reads the (bind-mounted) flat dir.
+      - name: Restart the registry service
+        run: |
+          docker context use $DOCKER_CONTEXT
+          docker restart vo_registry
