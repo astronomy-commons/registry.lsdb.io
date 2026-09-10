@@ -37,13 +37,17 @@ jobs:
         run: |
           ssh -i "${HOME}/.ssh/id_rsa" "${DEPLOY_USER}@${DEPLOY_HOST}" '
             set -e
+            
+            git config --global --add safe.directory ${{ env.REGISTRY_LSDB_IO }}
             cd ${{ env.REGISTRY_LSDB_IO }}
             git fetch --prune origin
             git reset --hard origin/main
+            
             RESOURCES_DIR="${{ env.REGISTRY_LSDB_IO }}/resources"
             FLAT_RESOURCES_DIR="${{ env.REGISTRY_LSDB_IO }}/_resources"
             chmod +x scripts/flatten_resources.sh
             scripts/flatten_resources.sh $RESOURCES_DIR $FLAT_RESOURCES_DIR
+
             cp $RESOURCES_DIR/authority.xml $FLAT_RESOURCES_DIR/authority.xml
             cp $RESOURCES_DIR/registry.xml $FLAT_RESOURCES_DIR/registry.xml
           '
