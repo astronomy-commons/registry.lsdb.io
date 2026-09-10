@@ -1,3 +1,9 @@
+# Deploys the VO resources to the registry at lsdb.phys.cmu.edu.
+#
+# On every push this workflow:
+# - Checks out the pushed commit in the server's clone of this repo.
+# - Flattens the XML resources/ alongside the registry's authority.xml and registry.xml.
+# - Restarts the vo_registry container, which bind-mounts the flattened resources.
 name: Deploy registry
 
 on:

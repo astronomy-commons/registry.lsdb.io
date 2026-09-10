@@ -47,4 +47,4 @@ rm -rf "$DST"
 mv "$TMP" "$DST"
 trap - EXIT
 
-echo "flatten: wrote $(find "$DST" -maxdepth 1 -type f | wc -l) files to '$DST'"
+echo "Wrote $(find "$DST" -maxdepth 1 -type f | wc -l) files to '$DST'"
