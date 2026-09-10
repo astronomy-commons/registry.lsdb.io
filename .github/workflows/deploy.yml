@@ -30,24 +30,26 @@ jobs:
           chmod 600 ${HOME}/.ssh/id_rsa
           ssh-keyscan -t ssh-rsa $DEPLOY_HOST >> ${HOME}/.ssh/known_hosts
 
-      # 1. Pull the repo's XML resources on the server.
-      # 2. Create a flattened copy of the resources in $REGISTRY_LSDB_IO/_resources.
-      # This directory is bind-mounted into the registry container.
+      # Pull the repo's XML resources on the server.
       - name: Sync resources in the server
         run: |
           ssh -i "${HOME}/.ssh/id_rsa" "${DEPLOY_USER}@${DEPLOY_HOST}" '
             set -e
-            
             git config --global --add safe.directory ${{ env.REGISTRY_LSDB_IO }}
             cd ${{ env.REGISTRY_LSDB_IO }}
             git fetch --prune origin
             git reset --hard origin/main
-            
+          '
+
+      # Create a flattened copy of the resources in $REGISTRY_LSDB_IO/_resources.
+      # This directory is bind-mounted into the registry container.
+      - name: Flatten resources
+        run: |
+          ssh -i "${HOME}/.ssh/id_rsa" "${DEPLOY_USER}@${DEPLOY_HOST}" '
+            set -e
             RESOURCES_DIR="${{ env.REGISTRY_LSDB_IO }}/resources"
             FLAT_RESOURCES_DIR="${{ env.REGISTRY_LSDB_IO }}/_resources"
-            chmod +x scripts/flatten_resources.sh
             scripts/flatten_resources.sh $RESOURCES_DIR $FLAT_RESOURCES_DIR
-
             cp $RESOURCES_DIR/authority.xml $FLAT_RESOURCES_DIR/authority.xml
             cp $RESOURCES_DIR/registry.xml $FLAT_RESOURCES_DIR/registry.xml
           '
