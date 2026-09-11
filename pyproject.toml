@@ -18,6 +18,10 @@ classifiers = [
 dynamic = ["version"]
 requires-python = ">=3.12"
 dependencies = [
+    "hats",
+    "jinja2",
+    "tabulate",
+    "tqdm",
 ]
 
 [project.urls]
@@ -40,6 +44,10 @@ requires = [
     "setuptools_scm>=10.2.1", # Gets release version from git. Makes it available programmatically
 ]
 build-backend = "setuptools.build_meta"
+
+# This project only has resources and scripts.
+[tool.setuptools]
+packages = []
 
 
 [tool.ruff]
