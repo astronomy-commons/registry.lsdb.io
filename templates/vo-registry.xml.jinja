@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ri:Resource xmlns=""
+    xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0"
+    xmlns:vg="http://www.ivoa.net/xml/VORegistry/v1.0"
+    xmlns:vr="http://www.ivoa.net/xml/VOResource/v1.0"
+    xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1"
+    xmlns:xs="http://www.ivoa.net/xml/SIA/v1.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    created="{{ created }}"
+    status="active"
+    updated="{{ updated }}"
+    xsi:type="vs:CatalogService"
+    xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/SIA/v1.1 http://www.ivoa.net/xml/SIA/v1.1">
+    <title>LINCC Frameworks - {{location}} - {{ name }}</title>
+    <shortName>{{ shortName }}</shortName>
+    <identifier>{{ identifier }}</identifier>
+    <curation>
+        <publisher ivo-id="ivo://data.lsdb">LINCC Frameworks</publisher>
+        <creator>
+            <name>LINCC Frameworks</name>
+            <logo>https://github.com/astronomy-commons/lsdb/blob/main/docs/lincc-logo.png?raw=true</logo>
+        </creator>
+        <contact>
+            <name>LINCC Frameworks Admins</name>
+            <email>delucchi@andrew.cmu.edu</email>
+        </contact>
+    </curation>
+    <content>
+        <subject>surveys</subject>
+        <description>{{ description }}</description>
+        <referenceURL>{{ referenceUrl }}</referenceURL>
+        <type>Archive</type>
+        <contentLevel>Research</contentLevel>
+    </content>
+    <capability standardID="ivo://ivoa.net/std/hats#hats-1.0">
+        <interface role="std" version="1.0" xsi:type="vs:ParamHTTP">
+            <accessURL>{{ accessUrl }}</accessURL>
+        </interface>
+    </capability>
+    {%- if wavebands or all_sky %}
+    <coverage>
+        {%- if all_sky %}
+        <stc:STCResourceProfile xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd">
+            <stc:AstroCoordSystem xlink:type="simple" xlink:href="ivo://STClib/CoordSys#UTC-ICRS-TOPO"/>
+            <stc:AstroCoordArea>
+                <stc:AllSky/>
+            </stc:AstroCoordArea>
+        </stc:STCResourceProfile>
+        {%- endif %}
+        {%- for waveband in wavebands %}
+        <waveband>{{ waveband }}</waveband>
+        {%- endfor %}
+    </coverage>
+    {%- endif %}
+</ri:Resource>
