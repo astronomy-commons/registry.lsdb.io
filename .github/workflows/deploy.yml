@@ -1,0 +1,59 @@
+# Deploys the VO resources to the registry at lsdb.phys.cmu.edu.
+#
+# On every push this workflow:
+# - Checks out the pushed commit in the server's clone of this repo.
+# - Flattens the XML resources/ alongside the registry's authority.xml and registry.xml.
+# - Restarts the vo_registry container, which bind-mounts the flattened resources.
+name: Deploy registry
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: "deployment"
+  cancel-in-progress: false
+
+env:
+  DEPLOY_USER: registry
+  DEPLOY_HOST: lsdb.phys.cmu.edu
+  # The path to the clone of this repo on the server.
+  REGISTRY_LSDB_IO: /opt/services/vo_registry/registry.lsdb.io
+  # Where authority.xml and registry.xml are stored on the server.
+  STATIC_RESOURCES: /opt/services/vo_registry/vo_registry/static/resources
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH
+        run: |
+          mkdir -p ${HOME}/.ssh
+          echo "${{ secrets.LSDB_PHYS_CMU_EDU_SSH_KEY }}" > ${HOME}/.ssh/id_rsa
+          ls -lk ${HOME}/.ssh/id_rsa
+          chmod 600 ${HOME}/.ssh/id_rsa
+          ssh-keyscan -t ssh-rsa $DEPLOY_HOST >> ${HOME}/.ssh/known_hosts
+
+      # Pull the repo's XML resources on the server.
+      - name: Sync resources in the server
+        run: |
+          ssh -i "${HOME}/.ssh/id_rsa" "${DEPLOY_USER}@${DEPLOY_HOST}" '
+            set -e
+            git config --global --add safe.directory ${{ env.REGISTRY_LSDB_IO }}
+            cd ${{ env.REGISTRY_LSDB_IO }}
+            git fetch --prune origin
+            git reset --hard ${{ github.sha }}
+            scripts/flatten_resources.sh resources _resources
+            cp ${{ env.STATIC_RESOURCES }}/authority.xml _resources/authority.xml
+            cp ${{ env.STATIC_RESOURCES }}/registry.xml _resources/registry.xml
+            chgrp -R docker _resources
+            chmod -R g+rwX _resources
+            chmod g+s _resources
+          '
+
+      # Restart the container so it re-reads the (bind-mounted) resources dir.
+      - name: Restart the registry service
+        run: |
+          docker context create registry-prod --docker "host=ssh://${DEPLOY_USER}@${DEPLOY_HOST}"
+          docker context use registry-prod
+          docker restart vo_registry
