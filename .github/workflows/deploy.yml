@@ -8,8 +8,7 @@ name: Deploy registry
 
 on:
   push:
-    # TODO: Remove deploy branch
-    branches: [main, deploy]
+    branches: [main]
 
 concurrency:
   group: "deployment"
