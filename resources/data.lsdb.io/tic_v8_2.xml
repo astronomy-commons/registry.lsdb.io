@@ -8,14 +8,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    created="2025-03-20T03:38UTC"
+    created="2025-11-24T20:37UTC"
     status="active"
-    updated="2026-09-11T19:58:09Z"
+    updated="2026-09-11T20:06:05Z"
     xsi:type="vs:CatalogService"
     xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/SIA/v1.1 http://www.ivoa.net/xml/SIA/v1.1">
-    <title>LINCC Frameworks - UW/Epyc - Euclid Quick Data Release 1</title>
-    <shortName>euclid_q1</shortName>
-    <identifier>ivo://data.lsdb/uw/euclid_q1</identifier>
+    <title>LINCC Frameworks - UW/Epyc - TESS Input Catalog v8.2</title>
+    <shortName>tic_v8_2</shortName>
+    <identifier>ivo://data.lsdb/uw/tic_v8_2</identifier>
     <curation>
         <publisher ivo-id="ivo://data.lsdb">LINCC Frameworks</publisher>
         <creator>
@@ -29,14 +29,14 @@
     </curation>
     <content>
         <subject>surveys</subject>
-        <description>Euclid is a space-based survey observatory launched by the European Space Agency (ESA) in July 2023, which aims to map the large-scale structure of the Universe to better understand dark energy and dark matter. The first Quick Data Release (Q1) covers 63 square degrees of the sky and including observations of 26 million galaxies.</description>
-        <referenceURL>https://www.cosmos.esa.int/en/web/euclid/euclid-q1-data-release</referenceURL>
+        <description>The TESS Input Catalog (TIC) is a compiled catalog of stellar parameters for every optically persistent, stationary object in the sky. The TIC is used to help identify two-minute cadence target selection for the TESS mission, and to calculate physical and observational properties of planet candidates. It is for use by both the TESS science team and the public, and it is periodically updated---the current version is TIC-8.2. TIC-8.2 uses the GAIA DR2 catalog as a base and merges a large number of other photometric catalogs, including 2MASS, UCAC4, APASS, SDSS, WISE, etc. There are roughly 1.7 billion stellar and extended sources in the TIC, containing compiled magnitudes including B, V, u, g, r, i, z, J, H, K, W1-W4, and G. This version was released in 2021.</description>
+        <referenceURL>https://tess.mit.edu/science/tess-input-catalogue/</referenceURL>
         <type>Archive</type>
         <contentLevel>Research</contentLevel>
     </content>
     <capability standardID="ivo://ivoa.net/std/hats#hats-1.0">
         <interface role="std" version="1.0" xsi:type="vs:ParamHTTP">
-            <accessURL>https://data.lsdb.io/hats/euclid_q1</accessURL>
+            <accessURL>https://data.lsdb.io/hats/tess/tic</accessURL>
         </interface>
     </capability>
     <coverage>

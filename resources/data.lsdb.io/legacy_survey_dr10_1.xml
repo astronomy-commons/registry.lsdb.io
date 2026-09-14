@@ -10,12 +10,12 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     created="2025-11-18T20:30:04Z"
     status="active"
-    updated="2026-06-17T16:08:34Z"
+    updated="2026-09-11T19:58:09Z"
     xsi:type="vs:CatalogService"
     xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/SIA/v1.1 http://www.ivoa.net/xml/SIA/v1.1">
     <title>LINCC Frameworks - UW/Epyc - Legacy Survey Data Release 10.1</title>
     <shortName>legacy_survey_dr</shortName>
-    <identifier>ivo://data.lsdb/uw/legacy_survey_dr</identifier>
+    <identifier>ivo://data.lsdb/uw/legacy_survey_dr10_1</identifier>
     <curation>
         <publisher ivo-id="ivo://data.lsdb">LINCC Frameworks</publisher>
         <creator>
