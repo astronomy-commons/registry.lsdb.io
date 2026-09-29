@@ -1,4 +1,4 @@
-# This workflow will run daily at 06:45.
+# This workflow will run daily at 07:45.
 # It tries to connect to every active resource in the registry,
 # reports whether it is reachable and how long it takes to load.
 
