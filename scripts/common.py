@@ -126,6 +126,7 @@ def read_resources(resource_dir):
             "name": path.stem,
             "status": root.get("status"),
             "created": root.get("created"),
+            "referenceUrl": root.findtext("content/referenceURL"),
             **{tag: root.findtext(tag) for tag in ("title", "shortName", "identifier")},
         }
     return resources

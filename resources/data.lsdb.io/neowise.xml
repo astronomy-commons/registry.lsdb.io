@@ -27,4 +27,11 @@
             <email>delucchi@andrew.cmu.edu</email>
         </contact>
     </curation>
+    <content>
+        <subject>surveys</subject>
+        <description>This resource has been deleted and is no longer available.</description>
+        <referenceURL>https://wise2.ipac.caltech.edu/docs/release/neowise/neowise_2022_release_intro.html</referenceURL>
+        <type>Archive</type>
+        <contentLevel>Research</contentLevel>
+    </content>
 </ri:Resource>
