@@ -19,6 +19,7 @@ dynamic = ["version"]
 requires-python = ">=3.12"
 dependencies = [
     "hats",
+    "huggingface_hub",
     "jinja2",
     "tabulate",
     "tqdm",

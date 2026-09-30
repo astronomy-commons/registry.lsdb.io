@@ -21,7 +21,8 @@ class ResourceError(Exception):
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
 TEMPLATES = Environment(loader=FileSystemLoader(ROOT_DIR / "templates"))
-TIMESTAMP = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+TIMESTAMP = datetime.now(UTC).strftime(TIMESTAMP_FORMAT)
 
 
 # Format of the catalog ids set in data.lsdb.io.
@@ -53,6 +54,16 @@ class Catalog:
         return f"ivo://data.lsdb/{self.short_location}/{self.id}"
 
 
+def format_timestamp(value):
+    """Convert a hats creation date, e.g. "2025-11-24T19:45UTC", to an XML dateTime.
+    Related to https://github.com/astronomy-commons/hats/issues/754."""
+    if not value:
+        return ""
+    return datetime.fromisoformat(value.strip().removesuffix("UTC").removesuffix("Z")).strftime(
+        TIMESTAMP_FORMAT
+    )
+
+
 def render_resource(catalog, existing, short_name_max):
     """Render the XML resource of a catalog, reading its properties with hats."""
     hats_catalog = hats.read_hats(catalog.url, read_moc=False)
@@ -61,6 +72,9 @@ def render_resource(catalog, existing, short_name_max):
     properties = hats_catalog.catalog_info.extra_dict()
 
     other_urls = catalog.info.get("other_urls", [])
+    created = existing.get("created") if existing else None
+    hats_creation_date = properties.get("hats_creation_date")
+
     return TEMPLATES.get_template("vo-registry.xml.jinja").render(
         name=catalog.info.get("name", ""),
         description=catalog.info.get("description", ""),
@@ -70,8 +84,9 @@ def render_resource(catalog, existing, short_name_max):
         identifier=catalog.identifier,
         location=catalog.location,
         wavebands=properties.get("obs_regime", "Optical").split(" "),
-        created=existing["created"] if existing else properties.get("hats_creation_date", TIMESTAMP),
         updated=TIMESTAMP,
+        created=format_timestamp(created) or TIMESTAMP,
+        hats_creation_date=format_timestamp(hats_creation_date),
         all_sky=float(properties.get("moc_sky_fraction", 0.0)) == 1.0,
     )
 
@@ -111,6 +126,7 @@ def read_resources(resource_dir):
             "name": path.stem,
             "status": root.get("status"),
             "created": root.get("created"),
+            "referenceUrl": root.findtext("content/referenceURL"),
             **{tag: root.findtext(tag) for tag in ("title", "shortName", "identifier")},
         }
     return resources
@@ -154,7 +170,14 @@ def find_problems(catalogs, resources, to_render, retired):
     return problems
 
 
-def run(catalogs, resource_dir, report=None, short_name_max=16, refresh_resources=False, rerender_list=()):
+def run(
+    catalogs,
+    resource_dir,
+    report=None,
+    short_name_max=16,
+    refresh_resources=False,
+    rerender_list=(),
+):
     """
     Write a resource for every new catalog (and every existing one, if refreshing), and write
     deleted records for the resources of catalogs that are no longer registered, and for old
@@ -178,7 +201,10 @@ def run(catalogs, resource_dir, report=None, short_name_max=16, refresh_resource
     # is kept as a deleted record named after its last segment (by catalog id, until it's rendered).
     to_delete = {name: active[name] for name in active.keys() - {catalog.id for catalog in catalogs}}
     retired = {
-        catalog.id: (active[catalog.id]["identifier"].rsplit("/", 1)[-1], active[catalog.id])
+        catalog.id: (
+            active[catalog.id]["identifier"].rsplit("/", 1)[-1],
+            active[catalog.id],
+        )
         for catalog in to_render
         if catalog.id in active and active[catalog.id]["identifier"] != catalog.identifier
     }

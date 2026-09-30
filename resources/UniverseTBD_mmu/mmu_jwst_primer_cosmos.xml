@@ -8,9 +8,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:stc="http://www.ivoa.net/xml/STC/stc-v1.30.xsd"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    created="2026-03-13T15:13UTC"
+    created="2026-03-13T15:13:00Z"
     status="active"
-    updated="2026-09-29T19:41:26Z"
+    updated="2026-09-30T18:46:46Z"
     xsi:type="vs:CatalogService"
     xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/SIA/v1.1 http://www.ivoa.net/xml/SIA/v1.1">
     <title>LINCC Frameworks - Hugging Face - mmu_jwst_primer_cosmos</title>
@@ -22,6 +22,7 @@
             <name>LINCC Frameworks</name>
             <logo>https://github.com/astronomy-commons/lsdb/blob/main/docs/lincc-logo.png?raw=true</logo>
         </creator>
+        <date role="Created">2026-03-13T15:13:00Z</date>
         <contact>
             <name>LINCC Frameworks Admins</name>
             <email>delucchi@andrew.cmu.edu</email>

@@ -10,7 +10,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     created="2025-11-18T20:30:04Z"
     status="active"
-    updated="2026-09-11T19:58:09Z"
+    updated="2026-09-30T18:45:28Z"
     xsi:type="vs:CatalogService"
     xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/SIA/v1.1 http://www.ivoa.net/xml/SIA/v1.1">
     <title>LINCC Frameworks - UW/Epyc - ZTF Ubercalibration Data Release 20</title>
@@ -22,6 +22,7 @@
             <name>LINCC Frameworks</name>
             <logo>https://github.com/astronomy-commons/lsdb/blob/main/docs/lincc-logo.png?raw=true</logo>
         </creator>
+        <date role="Created">2025-07-20T14:23:00Z</date>
         <contact>
             <name>LINCC Frameworks Admins</name>
             <email>delucchi@andrew.cmu.edu</email>

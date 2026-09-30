@@ -22,6 +22,10 @@
             <name>LINCC Frameworks</name>
             <logo>https://github.com/astronomy-commons/lsdb/blob/main/docs/lincc-logo.png?raw=true</logo>
         </creator>
+        {#- https://www.ivoa.net/rdf/voresource/date_role/2026-08-26/date_role.html#Created #}
+        {%- if hats_creation_date %}
+        <date role="Created">{{ hats_creation_date }}</date>
+        {%- endif %}
         <contact>
             <name>LINCC Frameworks Admins</name>
             <email>delucchi@andrew.cmu.edu</email>
