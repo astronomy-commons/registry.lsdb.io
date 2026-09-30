@@ -1,0 +1,51 @@
+# This workflow will run daily at 07:45.
+# It tries to connect to every active resource in the registry,
+# reports whether it is reachable and how long it takes to load.
+
+name: Connectivity Check
+
+on:
+  schedule:
+    - cron: 45 7 * * *
+  workflow_dispatch:
+
+jobs:
+  check-resources:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+      - name: Install dependencies
+        run: |
+          uv pip install --system .
+      - name: List dependencies
+        run: |
+          pip list
+      - name: Check resources - LOOK HERE FOR REPORT
+        run: |
+          python scripts/check_resources.py
+      - name: Send status to Slack app
+        if: ${{ failure() && github.event_name != 'workflow_dispatch' }}
+        id: slack
+        uses: slackapi/slack-github-action@v4
+        with:
+          # For posting a rich message using Block Kit
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: webhook-trigger
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":${{ job.status }}: *${{ github.repository }}:* nightly connectivity check (<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|run #${{ github.run_number }}>)"
+                  }
+                }
+              ]
+            }
