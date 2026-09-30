@@ -133,6 +133,9 @@ dmypy.json
 # vscode
 .vscode/
 
+# IntelliJ
+.idea/
+
 # dask
 dask-worker-space/
 
