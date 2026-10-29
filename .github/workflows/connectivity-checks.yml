@@ -13,13 +13,13 @@ jobs:
   check-resources:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
         with:
           python-version: "3.14"
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884  # v10.3.0
       - name: Install dependencies
         run: |
           uv pip install --system .
@@ -29,14 +29,19 @@ jobs:
       - name: Check resources - LOOK HERE FOR REPORT
         run: |
           python scripts/check_resources.py
+
+  notify:
+    needs: check-resources
+    if: ${{ failure() && github.event_name != 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Send status to Slack app
-        if: ${{ failure() && github.event_name != 'workflow_dispatch' }}
         id: slack
-        uses: slackapi/slack-github-action@v4
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d  # v4.0.0
         with:
           # For posting a rich message using Block Kit
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-type: webhook-trigger
+          webhook-type: incoming-webhook
           payload: |
             {
               "blocks": [
@@ -44,7 +49,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ":${{ job.status }}: *${{ github.repository }}:* nightly connectivity check (<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|run #${{ github.run_number }}>)"
+                    "text": ":${{ needs.check-resources.result }}: *${{ github.repository }}:* nightly connectivity check (<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|run #${{ github.run_number }}>)"
                   }
                 }
               ]
