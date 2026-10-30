@@ -10,10 +10,10 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     created="2025-11-18T20:30:04Z"
     status="active"
-    updated="2026-09-30T18:45:28Z"
+    updated="2026-10-30T15:58:48Z"
     xsi:type="vs:CatalogService"
     xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/SIA/v1.1 http://www.ivoa.net/xml/SIA/v1.1">
-    <title>LINCC Frameworks - UW/Epyc - Hyper Supreme Camera Public Data Release 3 g-band</title>
+    <title>LINCC Frameworks - UW/Epyc - Subaru Hyper Suprime Camera Public Data Release 3 g-band</title>
     <shortName>hsc_pdr3_g</shortName>
     <identifier>ivo://data.lsdb/uw/hsc_pdr3_g</identifier>
     <curation>
