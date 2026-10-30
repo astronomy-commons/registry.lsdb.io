@@ -23,6 +23,10 @@ def read_catalogs(data_dir, report):
         urls = info.get("urls", {})
         url = urls.get("collection") or urls.get("catalog")
 
+        ## Correct any terms
+        label = label.replace("hsc_subaru", "hsc")
+        info["id"] = info["id"].replace("hsc_subaru", "hsc")
+
         if info.get("skip_connectivity_check"):
             report.append([label, "", info["skip_connectivity_check"]])
         elif not url:
