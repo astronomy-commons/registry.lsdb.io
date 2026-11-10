@@ -1,0 +1,9 @@
+# Dependencies of populate_amsc.py. amsc-client isn't on PyPI: it and its AmSC
+# dependencies are on public GitLab registries. From the root of the repository:
+#   pip install -r scripts/amsc/requirements.txt
+--extra-index-url https://gitlab.com/api/v4/projects/77567162/packages/pypi/simple
+--extra-index-url https://gitlab.com/api/v4/projects/76368190/packages/pypi/simple
+--extra-index-url https://gitlab.com/api/v4/projects/80654726/packages/pypi/simple
+--extra-index-url https://gitlab.com/api/v4/projects/82001936/packages/pypi/simple
+
+amsc-client==0.8.0
