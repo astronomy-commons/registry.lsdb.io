@@ -1,13 +1,14 @@
-"""Register the HATS catalogs hosted on data.lsdb.io in the SLAC Cosmic public catalog.
+"""Register the HATS catalogs hosted on data.lsdb.io in an AmSC data catalog.
 
-Each catalog is registered under its data.lsdb.io folder:
+Each catalog is registered under the data.lsdb.io source entry and its data.lsdb.io folder:
 
-    <catalog FQN>
-    └── <folder>                scientificWork       e.g. Gaia
-        └── <catalog.json id>   artifactCollection   HATS collection, or standalone catalog
-            ├── <primary dir>   artifact             primary catalog
-            ├── <margin dir>    artifact             one per margin
-            └── <index dir>     artifact             one per index
+    <catalog FQN>                     e.g. hats-public-repository.hats-public-catalog
+    └── uw                            scientificWork       data.lsdb.io
+        └── <folder>                  artifactCollection   e.g. Gaia
+            └── <catalog.json id>     artifactCollection   HATS collection, or standalone catalog
+                ├── <primary dir>     artifact             primary catalog
+                ├── <margin dir>      artifact             one per margin
+                └── <index dir>       artifact             one per index
 
 Existing entities are skipped, or updated with --update. See scripts/amsc/README.md for setup and usage.
 """
@@ -38,10 +39,11 @@ from amsc_client.core.exceptions import AmscError, NotFoundError
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DATA_DIR = REPO_ROOT.parent / "data.lsdb.io" / "data"
-DEFAULT_CATALOG = "slac-cosmic-public-repository.slac-cosmic-public-catalog"
+DEFAULT_CATALOG = "hats-public-repository.hats-public-catalog"
 DEFAULT_API = "http://localhost:8000/api/current"
 
 HOST = "data.lsdb.io"
+SOURCE = "uw"
 PARQUET = "application/vnd.apache.parquet"
 PROPERTY_FILES = ("hats.properties", "properties")
 
@@ -180,11 +182,23 @@ def read_tables(catalog: Catalog) -> Catalog:
     return catalog
 
 
-def folder_entity(folder: str, titles: list[str]) -> ScientificWork:
-    """Return the scientificWork of a folder."""
-    title = folder.replace("_", " ")  # Folder names are the site's labels with "_" for " ".
+def source_entity() -> ScientificWork:
+    """Return the scientificWork of the data.lsdb.io source."""
     return ScientificWork(
         type_=EntityTypeEnum.SCIENTIFICWORK,
+        name=SOURCE,
+        display_name=HOST,
+        description=f"HATS catalogs hosted on {HOST} by the University of Washington.",
+        location=f"https://{HOST}/",
+    )
+
+
+def folder_entity(folder: str, titles: list[str], parent_fqn: str) -> ArtifactCollection:
+    """Return the artifactCollection of a folder."""
+    title = folder.replace("_", " ")  # Folder names are the site's labels with "_" for " ".
+    return ArtifactCollection(
+        type_=EntityTypeEnum.ARTIFACTCOLLECTION,
+        parent_fqn=parent_fqn,
         name=folder,
         display_name=title,
         description=f"{title} catalogs on {HOST}: {', '.join(titles)}.",
@@ -220,28 +234,16 @@ def table_entity(catalog: Catalog, table: HatsTable, parent_fqn: str) -> Artifac
 
 
 def describe(table: HatsTable, primary: str) -> tuple[str, str]:
-    """Return a short label and a one-sentence description of a HATS table."""
-    properties = table.properties
+    """Return a short label and a description of a HATS table."""
     if table.role == "primary":
-        label = "primary catalog"
-        text = f"Primary HATS catalog ({properties.get('dataproduct_type', 'object')})"
-    elif table.role == "margin":
-        threshold = properties.get("hats_margin_threshold")
-        label = f"margin, {float(threshold):g} arcsec" if threshold else "margin"
-        text = f"Margin cache of {primary}"
-        if threshold:
-            text += f", {float(threshold):g} arcsec threshold"
-        text += ", for cross-matching at partition edges"
-    else:
-        label = f"index on {table.index_column}"
-        text = f"Index table of {primary} on {table.index_column}, for fast ID lookups"
-
-    details = []
-    if "hats_nrows" in properties:
-        details.append(f"{int(properties['hats_nrows']):,} rows")
-    if "hats_order" in properties:
-        details.append(f"HEALPix order {properties['hats_order']}")
-    return label, f"{text}: {', '.join(details)}." if details else f"{text}."
+        return "primary catalog", "Primary HATS catalog"
+    if table.role == "margin":
+        threshold = table.properties.get("hats_margin_threshold")
+        if threshold is None:
+            return "margin", f"Margin cache of {primary}"
+        radius = f"{float(threshold):g} arcsec"
+        return f"margin, {radius}", f"Margin cache of {primary}, {radius}"
+    return f"index on {table.index_column}", f"Index catalog of {primary} on {table.index_column}"
 
 
 def child_fqn(parent: str, name: str) -> str:
@@ -279,10 +281,20 @@ class Registrar:
         self.counts[action] += 1
         print(f"  {action:7} {fqn}")
 
-    def register_folder(self, folder: str, titles: list[str]) -> str:
-        """Register a folder, and return its FQN."""
-        fqn = child_fqn(self.catalog_fqn, folder)
-        self.save(fqn, CreateEntityTypeEnum.SCIENTIFICWORK, folder_entity(folder, titles))
+    def register_source(self) -> str:
+        """Register the data.lsdb.io source, and return its FQN."""
+        fqn = child_fqn(self.catalog_fqn, SOURCE)
+        self.save(fqn, CreateEntityTypeEnum.SCIENTIFICWORK, source_entity())
+        return fqn
+
+    def register_folder(self, folder: str, titles: list[str], source_fqn: str) -> str:
+        """Register a folder under the source, and return its FQN."""
+        fqn = child_fqn(source_fqn, folder)
+        self.save(
+            fqn,
+            CreateEntityTypeEnum.ARTIFACTCOLLECTION,
+            folder_entity(folder, titles, source_fqn),
+        )
         return fqn
 
     def register_catalog(self, catalog: Catalog, folder_fqn: str) -> None:
@@ -307,12 +319,18 @@ def register(
     folders: dict[str, list[Catalog]],
     titles: dict[str, list[str]],
 ) -> list[tuple[str, str]]:
-    """Register every folder and its catalogs. Return the (catalog id, error) of failures."""
+    """Register the source, every folder and its catalogs. Return the (catalog id, error) of failures."""
+    try:
+        source_fqn = registrar.register_source()
+    except AmscError as e:
+        print(f"  FAILED  {one_line(e)}")
+        return [(catalog.id, one_line(e)) for catalogs in folders.values() for catalog in catalogs]
+
     failures = []
     for folder, catalogs in folders.items():
         print(f"\n{folder}")
         try:
-            folder_fqn = registrar.register_folder(folder, titles[folder])
+            folder_fqn = registrar.register_folder(folder, titles[folder], source_fqn)
         except AmscError as e:
             failures += [(catalog.id, one_line(e)) for catalog in catalogs]
             print(f"  FAILED  {one_line(e)}")
