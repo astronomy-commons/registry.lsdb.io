@@ -22,7 +22,8 @@ By default, this script will only add new resources, or mark missing resources f
 
 If you would like to update all existing resources, pass `--refresh_resources`, and the full XML
 will be re-generated. This can be useful if you significantly modify the script, template, or
-underlying data.
+underlying data. A re-generated resource is only written if something other than its `updated`
+date changes, so resources that are already up to date are left untouched.
 
 If you want to update particular resources only, you can use the `--rerender_list` argument,
 and provide a comma-separated list of labels. Note that you'll probably want to put some quotes
