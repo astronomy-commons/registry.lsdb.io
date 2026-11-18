@@ -65,7 +65,10 @@ def format_timestamp(value):
 
 
 def render_resource(catalog, existing, short_name_max):
-    """Render the XML resource of a catalog, reading its properties with hats."""
+    """
+    Render the XML resource of a catalog, reading its properties with hats. An existing resource
+    keeps its update date if nothing else in it changes, so that it's rendered exactly as it was.
+    """
     hats_catalog = hats.read_hats(catalog.url, read_moc=False)
     if isinstance(hats_catalog, CatalogCollection):
         hats_catalog = hats_catalog.main_catalog
@@ -75,7 +78,8 @@ def render_resource(catalog, existing, short_name_max):
     created = existing.get("created") if existing else None
     hats_creation_date = properties.get("hats_creation_date")
 
-    return TEMPLATES.get_template("vo-registry.xml.jinja").render(
+    template = TEMPLATES.get_template("vo-registry.xml.jinja")
+    fields = dict(
         name=catalog.info.get("name", ""),
         description=catalog.info.get("description", ""),
         accessUrl=catalog.url,
@@ -84,11 +88,15 @@ def render_resource(catalog, existing, short_name_max):
         identifier=catalog.identifier,
         location=catalog.location,
         wavebands=properties.get("obs_regime", "Optical").split(" "),
-        updated=TIMESTAMP,
         created=format_timestamp(created) or TIMESTAMP,
         hats_creation_date=format_timestamp(hats_creation_date),
         all_sky=float(properties.get("moc_sky_fraction", 0.0)) == 1.0,
     )
+    if existing:
+        resource = template.render(**fields, updated=existing["updated"])
+        if resource == existing["xml"]:
+            return resource
+    return template.render(**fields, updated=TIMESTAMP)
 
 
 def read_catalogs(data_dir, report):
@@ -124,8 +132,10 @@ def read_resources(resource_dir):
             raise
         resources[path.stem] = {
             "name": path.stem,
+            "xml": path.read_text(encoding="utf-8"),
             "status": root.get("status"),
             "created": root.get("created"),
+            "updated": root.get("updated"),
             "referenceUrl": root.findtext("content/referenceURL"),
             **{tag: root.findtext(tag) for tag in ("title", "shortName", "identifier")},
         }
@@ -215,10 +225,14 @@ def run(
         )
 
     for catalog in tqdm(to_render, desc="Rendering catalogs"):
+        existing = active.get(catalog.id)
         try:
-            resource = render_resource(catalog, active.get(catalog.id), short_name_max)
+            resource = render_resource(catalog, existing, short_name_max)
         except Exception as e:
             report.append([catalog.label, "", e])
+            continue
+        if existing and resource == existing["xml"]:
+            report.append([catalog.label, "", "skipped = unchanged"])
             continue
         (resource_dir / f"{catalog.id}.xml").write_text(resource, encoding="utf-8")
         report.append([catalog.label, "SUCCESS", ""])
@@ -227,7 +241,7 @@ def run(
             to_delete[name] = old
 
     for name, old in sorted(to_delete.items()):
-        record = TEMPLATES.get_template("vo-registry-deleted.xml.jinja").render(**old, updated=TIMESTAMP)
+        record = TEMPLATES.get_template("vo-registry-deleted.xml.jinja").render(old | {"updated": TIMESTAMP})
         (resource_dir / f"{name}.xml").write_text(record, encoding="utf-8")
         report.append([name, "REMOVED", old["identifier"]])
 

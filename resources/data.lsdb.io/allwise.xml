@@ -10,7 +10,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     created="2025-11-18T20:30:04Z"
     status="active"
-    updated="2026-09-30T18:45:28Z"
+    updated="2026-11-18T19:35:30Z"
     xsi:type="vs:CatalogService"
     xsi:schemaLocation="http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VOResource/v1.0 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/VODataService/v1.1 http://www.ivoa.net/xml/SIA/v1.1 http://www.ivoa.net/xml/SIA/v1.1">
     <title>LINCC Frameworks - UW/Epyc - AllWISE</title>
@@ -22,7 +22,7 @@
             <name>LINCC Frameworks</name>
             <logo>https://github.com/astronomy-commons/lsdb/blob/main/docs/lincc-logo.png?raw=true</logo>
         </creator>
-        <date role="Created">2025-11-17T18:12:00Z</date>
+        <date role="Created">2026-10-23T18:35:00Z</date>
         <contact>
             <name>LINCC Frameworks Admins</name>
             <email>delucchi@andrew.cmu.edu</email>
@@ -30,7 +30,7 @@
     </curation>
     <content>
         <subject>surveys</subject>
-        <description>AllWISE is an all-sky survey by the Palomar Observatory Schmidt, the European Southern Observatory Schmidt, and the United Kingdom Schmidt, the InfraRed Astronomical Satellite, and the Two Micron All Sky Survey. It contains accurate positions, apparent motion measurements, four-band fluxes and flux variability statistics for over 747 million objects detected on the coadded Atlas Images.</description>
+        <description>The AllWISE Source Catalog: 747 million mid-infrared sources from the WISE cryogenic and NEOWISE post-cryogenic surveys (2010-2011), with positions, apparent motions, W1-W4 photometry (3.4-22 micron), variability statistics and 2MASS associations.</description>
         <referenceURL>https://wise2.ipac.caltech.edu/docs/release/allwise/</referenceURL>
         <type>Archive</type>
         <contentLevel>Research</contentLevel>
@@ -42,6 +42,5 @@
     </capability>
     <coverage>
         <waveband>Infrared</waveband>
-        <waveband>Optical</waveband>
     </coverage>
 </ri:Resource>
